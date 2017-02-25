@@ -182,8 +182,11 @@ class Trips extends Command
         // Time 4am to 3am
         for ($minute = 0; $minute < 1380; $minute++) {
             $time = $this->convertTime($minute);
+            $this->info("Current time: ".$time);
             $this->advanceTrains();
+            $this->info("Trains: ".count($this->trains));
             $this->placeTrains($time);
+            $this->info("Placed Trains: ".count($this->trains));
             $this->boardPeople();
             $this->offloadPeople($time, $minute);
             $this->peopleIntoStations($time, $minute);
