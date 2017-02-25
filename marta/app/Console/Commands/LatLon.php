@@ -84,6 +84,7 @@ H.E. Holmes	33.79626754	-84.24110413";
             if ($r !== null) {
                 $r->lat = $tab[1];
                 $r->lon = $tab[2];
+                $r->save();
             } else {
                 $this->info($v);
             }
