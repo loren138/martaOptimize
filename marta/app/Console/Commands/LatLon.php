@@ -80,7 +80,7 @@ H.E. Holmes	33.79626754	-84.24110413";
         foreach ($data as $k => $v) {
             $tab = explode("\t", $v);
             $s = new Station();
-            $r = $s->where('name', $tab[0]);
+            $r = $s->where('name', $tab[0])->first();
             if ($r !== null) {
                 $r->lat = $tab[1];
                 $r->lon = $tab[2];
