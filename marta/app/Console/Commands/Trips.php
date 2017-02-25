@@ -165,31 +165,27 @@ class Trips extends Command
                         $dest = 22;
                     }
                     foreach ($v['stations'] as $s) {
-                        if ($k2 == 13) {
+                        if ($cur == 13) {
                             // There is only one train at Bankhead board it
                             $canRide = true;
                             $p['ashby'] = true;
                         }
-                        if (in_array($k2, $this->redOnly) && !in_array($p['dest'], $this->redOnly) && $s['s'] == 47) {
+                        if (in_array($cur, $this->redOnly) && !in_array($p['dest'], $this->redOnly) && $s['s'] == 47) {
                             // If we're at a red only station going to not red only, we need to go to Lindbergh
                             $canRide = true;
                             $p['lindbergh'] = true;
                         }
-                        if (!in_array($k2, $this->redOnly) && in_array($p['dest'], $this->redOnly) && $s['s'] == 47) {
+                        if (!in_array($cur, $this->redOnly) && in_array($p['dest'], $this->redOnly) && $s['s'] == 47) {
                             // If we're going to a red only station and not at one, we need to get to Lindbergh
                             // TODO Get off at Lindbergh if needed
                             $canRide = true;
                             $p['lindbergh'] = true;
                         }
-                        if (in_array($k2, $this->ewStations) && $p['dest'] == 13 && $s['s'] == 21) {
+                        if (in_array($cur, $this->ewStations) && $p['dest'] == 13 && $s['s'] == 21) {
                             // We're going to Bankhead and need to get to ashby
                             // TODO Get off at ashby if needed
                             $canRide = true;
                             $p['ashby'] = true;
-                        }
-                        if ($p['dest'] == 25 && $p['startStation'] == 26 && $canRide) {
-                            $this->error('h');
-                            var_export($p);
                         }
 
                         if ($s['s'] == $dest) {
