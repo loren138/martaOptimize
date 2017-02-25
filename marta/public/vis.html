@@ -1,0 +1,255 @@
+<html>
+<head><title>Marta Optimize Viz</title>
+    <script src="./js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript">
+        var trips;
+        $(document).ready(function () {
+            $.getJSON('./reportLine.json', function(json){
+                trips = json;
+                start();
+            });
+        });
+        var currentTime = 100;
+        function convertTime(minute) {
+            var hour = 4;
+            hour = 4 + Math.floor(minute/60);
+            minute = minute % 60;
+            if (hour >= 24) {
+                hour -= 24;
+            }
+            if (minute < 10) {
+                minute = "0"+minute;
+            }
+
+            return hour+':'+minute+':00';
+        }
+        function start() {
+            currentTime++;
+            $('#time').text(convertTime(currentTime));
+            var data = trips[currentTime];
+            var key;
+            for (key in data['s']) {
+                if (data['s'].hasOwnProperty(key)) {
+                    $(".st"+key).find('tspan').text((data['s'][key]/20).toFixed(0));
+                }
+            }
+            var arcG = $("#arcGraph");
+            /*    <g transform="translate(955,655)" class="train">
+             <rect x="-25" y="-10" width="50" height="20" fill="#333"></rect>
+             <text fill="white" y="5" text-anchor="middle">12,000</text>
+             </g>*/
+            $('.train').remove();
+            for (key in data['t']) {
+                if (data['t'].hasOwnProperty(key)) {
+                    var l = String(data['t'][key]['location']);
+                    var d = '';
+                    if (l.indexOf('-') > 0) {
+                        d = l.substr(l.indexOf('-')+1);
+                        l = l.substr(0, l.indexOf('-'));
+                    }
+                    var location = $('.st'+l);
+                    if (location.length == 1) {
+                        var trans = location.attr('transform');
+                        var transVal = trans.substr(10, trans.length - 10 - 1);
+                        transVal = transVal.split(',');
+                        var transX = parseInt(transVal[0]);
+                        var transY = parseInt(transVal[1]);
+                        if (d == 'f') {
+                            if (data['t'][key]['line'] == 'gold' || data['t'][key]['line'] == 'red') {
+                                transY -= 25;
+                            } else {
+                                transX += 25;
+                            }
+                        } else if (d == 'b') {
+                            if (data['t'][key]['line'] == 'gold' || data['t'][key]['line'] == 'red') {
+                                transY += 25;
+                            } else {
+                                transX -= 25;
+                            }
+                        }
+                        trans = "translate("+transX+","+transY+")"
+                        arcG.append(
+                            $(document.createElementNS("http://www.w3.org/2000/svg", "g"))
+                            //.attr('id', arcData[i]['s']+'ToSelf')
+                                .attr('class', 'train')
+                                .attr('transform', trans)
+                                .append(
+                                    $(document.createElementNS("http://www.w3.org/2000/svg", "rect"))
+                                        .attr('x', -25).attr('y', -10).attr('width', 50).attr('height', 20)
+                                        .attr('fill', '#333')
+                                ).append(
+                                $(document.createElementNS("http://www.w3.org/2000/svg", "text"))
+                                    .attr('x', 0).attr('y', 5).attr('text-anchor', 'middle')
+                                    .attr('fill', 'white').text((data['t'][key]['riders']/20).toFixed(0))
+                            )
+                        );
+                    }
+                }
+            }
+            setTimeout(start, 1000);
+        }
+    </script>
+</head>
+<body>
+<svg width="1000px" height="1000px"><g transform="translate(-240,-50)" id='arcGraph'>
+    <rect x="250" y="650px" width="705px" height="10px" rx="15" ry="15" fill="blue"/>
+    <line x1="350" y1="650" x2="300" y2="600" stroke-width="10" stroke="green"/>
+    <line x1="500" y1="350" x2="700" y2="105" stroke-width="10" stroke="gold"/>
+    <rect x="500" y="100px" width="10px" height="905px" rx="15" ry="15" fill="red"/>
+    <g transform="translate(505,1005)" class="st41">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Airport <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,955)" class="st40">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">College Park <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,905)" class="st39">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">East Point <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,855)" class="st38">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Lakewood <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,805)" class="st37">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Oakland City <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,755)" class="st36">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">West End <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,705)" class="st19">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Garnett <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,655)" class="st22">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Five Points <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,605)" class="st42">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Peachtree Center <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,555)" class="st43">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Civic Center <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,505)" class="st44">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">North Avenue <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,455)" class="st45">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Midtown <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,405)" class="st46">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Arts Center <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,355)" class="st47">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Lindbergh <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,305)" class="st51">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="-115px" y="5px">Buckhead <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,255)" class="st52">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="-115px" y="5px">Medical Center <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,205)" class="st53">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="-115px" y="5px">Dunwoody <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,155)" class="st18">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="-115px" y="5px">Sandy Springs <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(505,105)" class="st54">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="-115px" y="5px">North Springs <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(555,655)" class="st27">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Georgia State <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(605,655)" class="st28">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">King Memorial <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(655,655)" class="st29">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Inman Park <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(705,655)" class="st30">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Edgewood <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(755,655)" class="st31">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">East Lake <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(805,655)" class="st32">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Decatur <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(855,655)" class="st33">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Avondale <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(905,655)" class="st34">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Kensington <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(955,655)" class="st35">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Indian Creek <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(455,655)" class="st24">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Dome <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(405,655)" class="st23">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Vine City <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(355,655)" class="st21">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">Ashby <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(305,605)" class="st13">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Bankhead <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(305,655)" class="st25">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">West Lake <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(255,655)" class="st26">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="10px" transform="rotate(30 0,10)">H.E. Holmes <tspan>500</tspan></text>
+    </g>
+
+    <g transform="translate(555,285)" class="st48">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Lenox <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(605,225)" class="st20">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Brookhaven <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(655,165)" class="st49">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Chamblee <tspan>500</tspan></text>
+    </g>
+    <g transform="translate(705,105)" class="st50">
+        <circle r="10px" fill="white" stroke="black" stroke-width="2px"></circle>
+        <text x="15px" y="5px">Doraville <tspan>500</tspan></text>
+    </g>
+</g></svg><br>&nbsp;
+<H3>Time: <span id="time"></span></H3>
+</body>
+</html>
