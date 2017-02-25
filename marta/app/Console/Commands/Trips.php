@@ -238,7 +238,7 @@ class Trips extends Command
         }
 
         if ($report) {
-            print_r($this->report);
+            echo json_encode($this->report);
             file_put_contents(storage_path('report.json'), json_encode($this->report, 0, 1024));
         }
 
