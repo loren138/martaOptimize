@@ -43,8 +43,8 @@ CREATE TABLE `chunksAll2` (
 SELECT
     *
 FROM
-    chunksAll2
-INTO OUTFILE '/home/you/data/efcProcessed2.csv'
+    chunksAll
+INTO OUTFILE '/home/you/data/efcProcessedDay.csv'
 FIELDS ENCLOSED BY '"'
 TERMINATED BY ';'
 ESCAPED BY '"'
