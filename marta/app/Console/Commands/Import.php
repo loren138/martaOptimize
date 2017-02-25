@@ -101,7 +101,6 @@ Vine City	23
 Ashby	21
 Bankhead	13';
 
-        $sa = explode("\n", $stations);
         foreach ($stations as $line => $v) {
             $stations[$line] = explode("\n", $v);
             $order = 0;
