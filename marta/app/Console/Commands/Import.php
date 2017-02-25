@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Station;
+use App\StationOrder;
 use Illuminate\Console\Command;
 
 class Import extends Command
@@ -57,7 +58,7 @@ Lakewood/Ft. McPherson	38
 East Point	39
 College Park	40
 Airport	41";
-$stations['gold'] = "Doraville	50
+        $stations['gold'] = "Doraville	50
 Chamblee	49
 Brookhaven/Oglethorpe	20
 Lenox	48
@@ -75,7 +76,7 @@ Lakewood/Ft. McPherson	38
 East Point	39
 College Park	40
 Airport	41";
-$stations['blue'] = 'Indian Creek	35
+        $stations['blue'] = 'Indian Creek	35
 Kensington	34
 Avondale	33
 Decatur	32
@@ -90,7 +91,7 @@ Vine City	23
 Ashby	21
 West Lake	25
 H.E. Holmes	26';
-$stations['green'] = 'Edgewood/Candler Park	30
+        $stations['green'] = 'Edgewood/Candler Park	30
 Inman Park	29
 King Memorial	28
 Georgia State	27
@@ -101,10 +102,12 @@ Ashby	21
 Bankhead	13';
 
         $sa = explode("\n", $stations);
-foreach ($stations as $k => $v) {
-	$stations[$k] = explode("\n", $v);
-	foreach ($stations[$k] as $k2 => $v2) {
-		$stations[$k][$k2] = explode("\t", $v2);
+        foreach ($stations as $k => $v) {
+            $stations[$k] = explode("\n", $v);
+            $order = 0;
+            foreach ($stations[$k] as $k2 => $v2) {
+                $order++;
+                $stations[$k][$k2] = explode("\t", $v2);
                 $s = new Station();
                 $n = $s->find($v[1]);
                 if ($n === null) {
@@ -112,8 +115,13 @@ foreach ($stations as $k => $v) {
                     $s->name = $v[0];
                     $s->save();
                 }
-	}
-}
+                $so = new StationOrder();
+                $so->station = $v[1];
+                $so->order = $order;
+                $so->delay = 0;
+                $so->save();
+            }
+        }
         $this->info('hey');
     }
 }
