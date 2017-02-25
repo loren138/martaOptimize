@@ -115,7 +115,7 @@ class Trips extends Command
                     $lastDelay = $v['d'];
                 }
             }
-            $this->trains[] = [
+            $this->trains[$p->id] = [
                 'stations' => $stations,
                 'direction' => $forward ? 'f' : 'b',
                 'riders' => [],
