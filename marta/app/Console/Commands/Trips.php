@@ -63,7 +63,7 @@ class Trips extends Command
             $hour -= 24;
         }
 
-        return $hour.':'.$minute.':00';
+        return $hour.':'.str_pad($minute, 2, '0',STR_PAD_LEFT).':00';
     }
 
     public function placeTrains($time) {
