@@ -102,12 +102,12 @@ Ashby	21
 Bankhead	13';
 
         $sa = explode("\n", $stations);
-        foreach ($stations as $k => $v) {
-            $stations[$k] = explode("\n", $v);
+        foreach ($stations as $line => $v) {
+            $stations[$line] = explode("\n", $v);
             $order = 0;
-            foreach ($stations[$k] as $k2 => $v2) {
+            foreach ($stations[$line] as $k2 => $v2) {
                 $order++;
-                $stations[$k][$k2] = explode("\t", $v2);
+                $stations[$line][$k2] = explode("\t", $v2);
                 $s = new Station();
                 $n = $s->find($v[1]);
                 if ($n === null) {
@@ -117,8 +117,9 @@ Bankhead	13';
                 }
                 $so = new StationOrder();
                 $so->station = $v[1];
-                $so->order = $order;
+                $so->ordering = $order;
                 $so->delay = 0;
+                $so->line = $line;
                 $so->save();
             }
         }
