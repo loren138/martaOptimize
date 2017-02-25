@@ -122,6 +122,7 @@ class Trips extends Command
                         print_r($this->trains[$k]['riders']);
                     }
                     unset($this->trains[$k]);
+                    break;
                 }
                 //print_r($this->trains[$k]['stations'][0]);
                 //die;
