@@ -114,10 +114,10 @@ class Trips extends Command
             if ($v['stations'][0]['s'] == 22 && $v['dwell5points'] > 0) {
                 $this->trains[$k]['dwell5points']--; // Subtract dwell at 5 points
             } elseif ($v['stations'][0]['d'] == 0) { // Advance a station
-                print_r($this->trains[$k]['stations'][0]);
+                //print_r($this->trains[$k]['stations'][0]);
                 $passed = array_shift($this->trains[$k]['stations']);
-                print_r($this->trains[$k]['stations'][0]);
-                die;
+                //print_r($this->trains[$k]['stations'][0]);
+                //die;
             }
             $this->trains[$k]['stations'][0]['d'] -= 1; // Move the train forward between stations
         }
