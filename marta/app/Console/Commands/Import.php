@@ -104,6 +104,15 @@ Bankhead	13  4';
         foreach ($stations as $line => $v) {
             $stations[$line] = explode("\n", $v);
             $order = 0;
+            $delay = 0;
+            $delaySouth = 0;
+
+            foreach ($stations[$line] as $k2 => $v2) {
+                $order++;
+                $v2 = explode("\t", str_replace("  ", "\t", $v2));
+                $stations[$line][$k2] = $v2;
+                $delaySouth += $v2[2];
+            }
             foreach ($stations[$line] as $k2 => $v2) {
                 $order++;
                 $v2 = explode("\t", str_replace("  ", "\t", $v2));
@@ -119,6 +128,10 @@ Bankhead	13  4';
                 $so->station = $v2[1];
                 $so->ordering = $order;
                 $so->delay = $v2[2];
+                $delay += $v2[2];
+                $delaySouth -= $v2[2];
+                $so->delayfromnorth = $delay;
+                $so->delayfromsouth = $delaySouth;
                 $so->line = $line;
                 $so->save();
             }
