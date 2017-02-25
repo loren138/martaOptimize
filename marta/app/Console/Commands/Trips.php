@@ -56,7 +56,6 @@ class Trips extends Command
 
     public function convertTime($minute) {
         $hour = 4;
-        $minute = 0;
         $hour = 4 + floor($minute/60);
         $minute = $minute % 60;
         if ($hour >= 24) {
