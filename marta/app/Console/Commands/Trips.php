@@ -152,9 +152,6 @@ class Trips extends Command
     public function boardPeople() {
         foreach ($this->trains as $k => $v) {
             if ($v['stations'][0]['d'] == 0) {
-                if($v['stations'][0]['s'] == 25) {
-                    $this->error("train at 25");
-                }
                 // Go through all the trains in stations
                 $cur = $v['stations'][0]['s'];
                 foreach ($this->stations[$cur]['people'] as $k2 => $p) {
@@ -211,51 +208,37 @@ class Trips extends Command
                 // Go through all the trains in stations
                 $cur = $v['stations'][0]['s'];
                 foreach ($v['riders'] as $k2 => $p) {
-                    $dest = $p['dest'];
-                    if ($p['fivePoints']) {
-                        $dest = 22;
-                    }
-                    if ($p['lindbergh']) {
-                        $dest = 47;
-                    }
-                    if ($p['ashby']) {
-                        $dest = 21;
-                    }
-                    if ($cur == $dest) {
-                        if ($p['fivePoints'] && $dest == 22) {
-                            // Transfer
-                            $p['fivePoints'] = false;
-                            unset($this->trains[$k]['riders'][$k2]);
-                            $this->stations[22]['people'][] = $p;
-                        } elseif ($p['lindbergh'] && $dest == 47) {
-                            // Transfer
-                            $p['lindbergh'] = false;
-                            unset($this->trains[$k]['riders'][$k2]);
-                            $this->stations[47]['people'][] = $p;
-                        } elseif ($p['ashby'] && $dest == 21) {
-                            // Transfer
-                            $p['ashby'] = false;
-                            unset($this->trains[$k]['riders'][$k2]);
-                            $this->stations[21]['people'][] = $p;
-                        } else {
-                            // Rider has reached
-                            $this->delay += $minute - $p['start'];
-                            if (($minute - $p['start']) > 200) {
-                                //$this->error($minute - $p['start']);
-                                //var_export($p);
-                            }
-                            unset($this->trains[$k]['riders'][$k2]);
+                    if ($p['dest'] == $cur) {
+                        // Rider has reached
+                        $this->delay += $minute - $p['start'];
+                        if (($minute - $p['start']) > 200) {
+                            //$this->error($minute - $p['start']);
+                            //var_export($p);
                         }
+                        unset($this->trains[$k]['riders'][$k2]);
+                    } elseif ($p['fivePoints'] && $cur == 22) {
+                        // Transfer
+                        $p['fivePoints'] = false;
+                        unset($this->trains[$k]['riders'][$k2]);
+                        $this->stations[$cur]['people'][] = $p;
+                    } elseif ($p['lindbergh'] && $cur == 47) {
+                        // Transfer
+                        $p['lindbergh'] = false;
+                        unset($this->trains[$k]['riders'][$k2]);
+                        $this->stations[$cur]['people'][] = $p;
+                    } elseif ($p['ashby'] && $cur == 21) {
+                        // Transfer
+                        $p['ashby'] = false;
+                        unset($this->trains[$k]['riders'][$k2]);
+                        $this->stations[$cur]['people'][] = $p;
                     }
                     // TODO Delay 2 minutes at five points?
                 }
                 if (count($v['stations']) == 1) {
                     // Offload all they are riding to transfer
                     foreach ($v['riders'] as $k2 => $p) {
-                        // Transfer
-                        $p['fivePoints'] = false;
                         unset($this->trains[$k]['riders'][$k2]);
-                        $this->stations[22]['people'][] = $p;
+                        $this->stations[$cur]['people'][] = $p;
                     }
                 }
             }
