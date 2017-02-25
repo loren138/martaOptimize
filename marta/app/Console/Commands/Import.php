@@ -118,7 +118,7 @@ Bankhead	13  4';
                 $so = new StationOrder();
                 $so->station = $v2[1];
                 $so->ordering = $order;
-                $so->delay = $v[2];
+                $so->delay = $v2[2];
                 $so->line = $line;
                 $so->save();
             }
