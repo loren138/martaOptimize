@@ -185,6 +185,7 @@ class Trips extends Command
                             $p['ashby'] = true;
                         }
                         if ($p['dest'] == 42 && $p['startStation'] == 43 && $canRide) {
+                            $this->error('h');
                             var_export($p);
                         }
 
@@ -241,7 +242,7 @@ class Trips extends Command
                             // Rider has reached
                             $this->delay += $minute - $p['start'];
                             if ($this->delay > 200) {
-                                //print_r($p);
+                                print_r($p);
                             }
                             unset($this->trains[$k]['riders'][$k2]);
                         }
