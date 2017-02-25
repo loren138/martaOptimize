@@ -6,6 +6,7 @@ use App\ChunksAll;
 use App\Station;
 use App\StationOrder;
 use App\TrainSched;
+use App\TrainSchedDelay;
 use Illuminate\Console\Command;
 
 class Trips extends Command
@@ -54,7 +55,7 @@ class Trips extends Command
     {
         parent::__construct();
         $s = new Station();
-        $this->trainSched = new TrainSched();
+        $this->trainSched = new TrainSchedDelay();
         $this->stationOrder = new StationOrder();
         $this->chunksAll = new ChunksAll();
         foreach ($s->all() as $v) {
