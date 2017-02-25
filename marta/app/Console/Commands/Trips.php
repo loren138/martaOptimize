@@ -25,7 +25,7 @@ class Trips extends Command
     protected $description = 'Command description';
 
     public $trains = [
-        ['stations' => [], 'dwell5points' => 0]
+       // ['stations' => [], 'dwell5points' => 0]
     ];
 
     public $stations = [
