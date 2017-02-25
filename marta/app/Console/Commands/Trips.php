@@ -240,6 +240,7 @@ class Trips extends Command
         if ($report) {
             $r = json_encode($this->report);
             echo $r;
+            \Storage::disk('local')->put('report2.json', $r);
             file_put_contents(storage_path('report.json'), $r);
         }
 
