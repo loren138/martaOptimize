@@ -94,6 +94,7 @@ class Trips extends Command
                 }
                 if ($active) {
                     $stations[] = ['s' => $t->station, 'd' => $first ? 0 : $t->delay];
+                    $first = false;
                 }
             }
             if (!$forward) {
