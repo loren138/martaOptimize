@@ -108,15 +108,12 @@ Bankhead	13  4';
             $delaySouth = 0;
 
             foreach ($stations[$line] as $k2 => $v2) {
-                $order++;
                 $v2 = explode("\t", str_replace("  ", "\t", $v2));
                 $stations[$line][$k2] = $v2;
                 $delaySouth += $v2[2];
             }
             foreach ($stations[$line] as $k2 => $v2) {
                 $order++;
-                $v2 = explode("\t", str_replace("  ", "\t", $v2));
-                $stations[$line][$k2] = $v2;
                 $s = new Station();
                 $n = $s->find($v2[1]);
                 if ($n === null) {
