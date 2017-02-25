@@ -203,7 +203,7 @@ class Trips extends Command
             if ($v['stations'][0]['d'] == 0) {
                 $loc = $v['stations'][0]['s'];
             } else {
-                $loc = $v['stations'][0]['s'].'-'.$v['stations'][1]['s'];
+                $loc = $v['stations'][0]['s'].'-'.$v['direction'];
             }
             $trains[] = ['riders' => count($v['riders']), 'location' => $loc];
         }
