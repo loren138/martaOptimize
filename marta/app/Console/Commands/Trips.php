@@ -265,8 +265,7 @@ class Trips extends Command
     public function peopleIntoStations($time, $minute) {
 
         $people = $this->chunksAll->where('entry_time', '>=', $time)->where('dayOfWeek', 'weekday')
-            ->where('entry_time', '<', $this->convertTime($minute+1))
-            ->whereIn('entry_station', [25,26])->whereIn('exit_station', [25,26])->get();
+            ->where('entry_time', '<', $this->convertTime($minute+1))->get();
         foreach ($people as $p) {
             if ($p->entry_station == $p->exit_station) {
                 continue;
