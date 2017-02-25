@@ -152,6 +152,9 @@ class Trips extends Command
     public function boardPeople() {
         foreach ($this->trains as $k => $v) {
             if ($v['stations'][0]['d'] == 0) {
+                if($v['stations'][0]['s'] == 25) {
+                    $this->info("train at 25");
+                }
                 // Go through all the trains in stations
                 $cur = $v['stations'][0]['s'];
                 foreach ($this->stations[$cur]['people'] as $k2 => $p) {
