@@ -184,7 +184,7 @@ class Trips extends Command
                             $canRide = true;
                             $p['ashby'] = true;
                         }
-                        if ($p['dest'] == 42 && $p['startStation'] == 43 && $canRide) {
+                        if ($p['dest'] == 25 && $p['startStation'] == 26 && $canRide) {
                             $this->error('h');
                             var_export($p);
                         }
