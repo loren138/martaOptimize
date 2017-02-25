@@ -120,6 +120,7 @@ class Trips extends Command
                 'direction' => $forward ? 'f' : 'b',
                 'riders' => [],
                 'dwell5points' => $p->dwell5points,
+                'line' => $p->line
             ];
         }
     }
