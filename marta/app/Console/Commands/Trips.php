@@ -183,9 +183,10 @@ class Trips extends Command
             $time = $this->convertTime($minute);
             $this->info("Minute: ".$minute." Current time: ".$time);
             $this->advanceTrains();
-            $this->info("Trains: ".count($this->trains));
             $this->placeTrains($time);
-            $this->info("Placed Trains: ".count($this->trains));
+            foreach ($this->trains as $k => $t) {
+                $this->info($k.' '.$t['stations'][0]['s'].' '.$t['stations'][0]['d']);
+            }
             $this->boardPeople();
             $this->offloadPeople($time, $minute);
             $this->peopleIntoStations($time, $minute);
