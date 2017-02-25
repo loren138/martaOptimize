@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChunksAll extends Model
 {
-    public $table = 'trainSched';
+    public $table = 'chunksAll';
     public $timestamps = false;
 }
