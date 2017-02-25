@@ -283,7 +283,7 @@ class Trips extends Command
             }
             $this->stations[$p->entry_station]['people'][] = [
                 'dest' => $p->exit_station, 'start' => $minute, 'fivePoints' => $fivePoints,
-                'lindbergh' => false, 'ashby' => false
+                'lindbergh' => false, 'ashby' => false, 'startStation' => $p->entry_station
             ]; //32,110,077
         }
     }
