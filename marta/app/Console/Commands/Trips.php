@@ -263,6 +263,9 @@ class Trips extends Command
         $people = $this->chunksAll->where('entry_time', '>=', $time)->where('dayOfWeek', 'weekday')
             ->where('entry_time', '<', $this->convertTime($minute+1))->get();
         foreach ($people as $p) {
+            if ($p->entry_station == $p->exit_station) {
+                continue;
+            }
             $fivePoints = false;
             if (in_array($p->entry_station, $this->nsStations)) {
                 if (!in_array($p->exit_station, $this->nsStations)) {
