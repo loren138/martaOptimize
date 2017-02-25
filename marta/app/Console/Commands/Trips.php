@@ -292,7 +292,7 @@ class Trips extends Command
             } else {
                 $loc = $v['stations'][0]['s'].'-'.$v['direction'];
             }
-            $trains[] = ['riders' => count($v['riders']), 'location' => $loc];
+            $trains[] = ['riders' => count($v['riders']), 'location' => $loc, 'line' => $v['line']];
         }
         $this->report[$minute] = ['s' => $stations, 't' => $trains];
     }
