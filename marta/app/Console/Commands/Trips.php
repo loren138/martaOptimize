@@ -238,8 +238,9 @@ class Trips extends Command
         }
 
         if ($report) {
-            echo json_encode($this->report);
-            file_put_contents(storage_path('report.json'), json_encode($this->report, 0, 1024));
+            $r = json_encode($this->report);
+            echo $r;
+            file_put_contents(storage_path('report.json'), $r);
         }
 
         $this->info("Total Delay ". $this->delay." minutes!");
