@@ -108,14 +108,14 @@ Bankhead	13';
                 $order++;
                 $stations[$line][$k2] = explode("\t", $v2);
                 $s = new Station();
-                $n = $s->find($v[1]);
+                $n = $s->find($v2[1]);
                 if ($n === null) {
-                    $s->id = $v[1];
-                    $s->name = $v[0];
+                    $s->id = $v2[1];
+                    $s->name = $v2[0];
                     $s->save();
                 }
                 $so = new StationOrder();
-                $so->station = $v[1];
+                $so->station = $v2[1];
                 $so->ordering = $order;
                 $so->delay = 0;
                 $so->line = $line;
