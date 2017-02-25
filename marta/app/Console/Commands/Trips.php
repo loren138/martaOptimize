@@ -38,6 +38,9 @@ class Trips extends Command
     public $chunksAll;
     public $report = [];
 
+    public $ewStations = [13,21,23,24,22,25,26,27,28,29,30,31,32,33,34,35];
+    public $nsStations = [18,19,20,22,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54];
+
     /**
      * Create a new command instance.
      *
@@ -151,8 +154,12 @@ class Trips extends Command
                     // See if the people in that station are headed to a destination on that route
                     // TODO People should be able to board to 5 points
                     $canRide = false;
+                    $dest = $p['dest'];
+                    if ($p['fivePoints']) {
+                        $dest = 22;
+                    }
                     foreach ($v['stations'] as $s) {
-                        if ($s['s'] == $p['dest']) {
+                        if ($s['s'] == $dest) {
                             $canRide = true;
                             break;
                         }
@@ -173,12 +180,23 @@ class Trips extends Command
                 // Go through all the trains in stations
                 $cur = $v['stations'][0]['s'];
                 foreach ($v['riders'] as $k2 => $p) {
-                    if ($cur == $p['dest']) {
-                        // Rider has reached
-                        $this->delay += $minute - $p['start'];
-                        unset($this->trains[$k]['riders'][$k2]);
+                    $dest = $p['dest'];
+                    if ($p['fivePoints']) {
+                        $dest = 22;
                     }
-                    // TODO Something should send people into 5 points as needed
+                    if ($cur == $dest) {
+                        if ($p['fivePoints']) {
+                            // Transfer
+                            $p['fivePoints'] = false;
+                            unset($this->trains[$k]['riders'][$k2]);
+                            $this->stations[22]['people'][] = $p;
+                        } else {
+                            // Rider has reached
+                            $this->delay += $minute - $p['start'];
+                            unset($this->trains[$k]['riders'][$k2]);
+                        }
+                    }
+                    // TODO Delay 2 minutes at five points?
                 }
             }
         }
@@ -186,10 +204,30 @@ class Trips extends Command
 
     public function peopleIntoStations($time, $minute) {
 
-        $people = $this->chunksAll->where('entry_time', '>=', $time)
+        $people = $this->chunksAll->where('entry_time', '>=', $time)->where('dayOfWeek', 'weekday')
             ->where('entry_time', '<', $this->convertTime($minute+1))->get();
         foreach ($people as $p) {
-            $this->stations[$p->entry_station]['people'][] = ['dest' => $p->exit_station, 'start' => $minute];
+            $fivePoints = false;
+            if (in_array($p->entry_station, $this->nsStations)) {
+                if (!in_array($p->exit_station, $this->nsStations)) {
+                    $fivePoints = true;
+                } else {
+                    $fivePoints = false;
+                }
+            }
+            if (in_array($p->entry_station, $this->ewStations)) {
+                if (!in_array($p->exit_station, $this->ewStations)) {
+                    $fivePoints = true;
+                } else {
+                    $fivePoints = false;
+                }
+            }
+            if ($p->entry_station == 22 || $p->exit_station == 22) {
+                $fivePoints = false;
+            }
+            $this->stations[$p->entry_station]['people'][] = [
+                'dest' => $p->exit_station, 'start' => $minute, 'fivePoints' => $fivePoints
+            ];
         }
     }
 
