@@ -184,6 +184,9 @@ class Trips extends Command
                             $canRide = true;
                             $p['ashby'] = true;
                         }
+                        if ($p['dest'] == 42 && $p['startStation'] == 43 && $canRide) {
+                            var_export($p);
+                        }
 
                         if ($s['s'] == $dest) {
                             $canRide = true;
