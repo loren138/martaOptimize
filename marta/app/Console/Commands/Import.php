@@ -47,7 +47,7 @@ Buckhead	51  5
 Lindberg Center	47  4
 Arts Center	46  4
 Midtown	45  2
-North Avenue    44 1
+North Avenue  44 1
 Civic Center	43  1
 Peachtree Center	42  1
 Five Points	22  2
