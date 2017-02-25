@@ -140,7 +140,7 @@ class Trips extends Command
                 }
                 if ($this->trains[$k]['stations'][0]['d'] == 0) {
                     $this->error('0 delay');
-                    var_export($this->trains[$k]['stations']);
+                    //var_export($this->trains[$k]['stations']);
                 }
                 //print_r($this->trains[$k]['stations'][0]);
                 //die;
