@@ -75,7 +75,7 @@ class Trips extends Command
             } else {
                 $line = $end[0]->line;
             }
-            $trains = $this->stationOrder->where('line', $line)->orderBy('order')->get();
+            $trains = $this->stationOrder->where('line', $line)->orderBy('ordering')->get();
             $active = false;
             $stations = [];
             $first = false;
