@@ -86,27 +86,25 @@ class Trips extends Command
                     if ($t->station == $p->startStation) {
                         $forward = true;
                         $active = true;
-                        $first = true;
                     } elseif ($t->station == $p->endStation) {
                         $forward = false;
                         $active = true;
-                        $first = true;
                     }
                 }
                 if ($active) {
-                    $delay = $t->delay;
-                    if ($first) {
-                        $delay = 0;
-                    } elseif (!$forward) {
-                        $delay = $lastDelay;
-                    }
-                    $stations[] = ['s' => $t->station, 'd' => $delay];
+                    $stations[] = ['s' => $t->station, 'd' => $t->delay];
                     $lastDelay = $t->delay;
-                    $first = false;
                 }
             }
             if (!$forward) {
                 $stations = array_reverse($stations);
+            }
+            if ($stations[0]['d'] != 0) {
+                $lastDelay = 0;
+                foreach ($stations as $k => $v) {
+                    $stations[$k]['d'] = $lastDelay;
+                    $lastDelay = $v['d'];
+                }
             }
             $this->trains[] = [
                 'stations' => $stations,
