@@ -220,9 +220,10 @@ class Trips extends Command
         $report = true;
         ini_set('memory_limit','2048M');
         // Time 4am to 3am
-        for ($minute = 0; $minute < 1380; $minute++) {
+        //1380
+        for ($minute = 0; $minute < 300; $minute++) {
             $time = $this->convertTime($minute);
-            $this->info("Minute: ".$minute." Current time: ".$time." Delay: ".$this->delay);
+            $this->info("Minute: ".$minute." Current time: ".$time." Delay: ".$this->delay." ".count($this->trains));
             $this->advanceTrains();
             $this->placeTrains($time);
             //foreach ($this->trains as $k => $t) {
