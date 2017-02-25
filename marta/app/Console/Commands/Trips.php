@@ -242,7 +242,7 @@ class Trips extends Command
                             // Rider has reached
                             $this->delay += $minute - $p['start'];
                             if ($this->delay > 200) {
-                                $this->error($this->delay)
+                                $this->error($this->delay);
                                 var_export($p);
                             }
                             unset($this->trains[$k]['riders'][$k2]);
