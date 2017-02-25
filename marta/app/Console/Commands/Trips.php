@@ -223,7 +223,7 @@ class Trips extends Command
         //1380
         for ($minute = 0; $minute < 100; $minute++) {
             $time = $this->convertTime($minute);
-            $this->info("Minute: ".$minute." Current time: ".$time." Delay: ".$this->delay." ".count($this->trains));
+            //$this->info("Minute: ".$minute." Current time: ".$time." Delay: ".$this->delay." ".count($this->trains));
             $this->advanceTrains();
             $this->placeTrains($time);
             //foreach ($this->trains as $k => $t) {
@@ -246,6 +246,6 @@ class Trips extends Command
             file_put_contents(storage_path('report.json'), $r);
         }
 
-        $this->info("Total Delay ". $this->delay." minutes!");
+        //$this->info("Total Delay ". $this->delay." minutes!");
     }
 }
