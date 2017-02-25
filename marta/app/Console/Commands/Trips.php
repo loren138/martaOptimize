@@ -40,6 +40,10 @@ class Trips extends Command
 
     public $ewStations = [13,21,23,24,22,25,26,27,28,29,30,31,32,33,34,35];
     public $nsStations = [18,19,20,22,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54];
+    public $redOnly = [54, 18, 53, 52, 51];
+
+    // Lindberg Transfer
+    // Bankhead Transfer
 
     /**
      * Create a new command instance.
@@ -152,15 +156,39 @@ class Trips extends Command
                 $cur = $v['stations'][0]['s'];
                 foreach ($this->stations[$cur]['people'] as $k2 => $p) {
                     // See if the people in that station are headed to a destination on that route
-                    // TODO People should be able to board to 5 points
                     $canRide = false;
                     $dest = $p['dest'];
                     if ($p['fivePoints']) {
                         $dest = 22;
                     }
                     foreach ($v['stations'] as $s) {
+                        if ($k2 == 13) {
+                            // There is only one train at Bankhead board it
+                            $canRide = true;
+                            break;
+                        }
+                        if (in_array($k2, $this->redOnly) && !in_array($p['dest'], $this->redOnly) && $s['s'] == 47) {
+                            // If we're at a red only station going to not red only, we need to go to Lindbergh
+                            $canRide = true;
+                            break;
+                        }
+                        if (!in_array($k2, $this->redOnly) && in_array($p['dest'], $this->redOnly) && $s['s'] == 47) {
+                            // If we're going to a red only station and not at one, we need to get to Lindbergh
+                            // TODO Get off at Lindbergh if needed
+                            $canRide = true;
+                            $p['lindbergh'] = true;
+                        }
+                        if (in_array($k2, $this->ewStations) && $p['dest'] == 13 && $s['s'] == 21) {
+                            // We're going to Bankhead and need to get to ashby
+                            // TODO Get off at ashby if needed
+                            $canRide = true;
+                            $p['ashby'] = true;
+                        }
+
                         if ($s['s'] == $dest) {
                             $canRide = true;
+                            $p['lindbergh'] = false;
+                            $p['ashby'] = false;
                             break;
                         }
                     }
@@ -184,12 +212,28 @@ class Trips extends Command
                     if ($p['fivePoints']) {
                         $dest = 22;
                     }
+                    if ($p['lindbergh']) {
+                        $dest = 47;
+                    }
+                    if ($p['ashby']) {
+                        $dest = 21;
+                    }
                     if ($cur == $dest) {
-                        if ($p['fivePoints']) {
+                        if ($p['fivePoints'] && $dest == 22) {
                             // Transfer
                             $p['fivePoints'] = false;
                             unset($this->trains[$k]['riders'][$k2]);
                             $this->stations[22]['people'][] = $p;
+                        } elseif ($p['lindbergh'] && $dest == 47) {
+                            // Transfer
+                            $p['lindbergh'] = false;
+                            unset($this->trains[$k]['riders'][$k2]);
+                            $this->stations[47]['people'][] = $p;
+                        } elseif ($p['ashby'] && $dest == 21) {
+                            // Transfer
+                            $p['ashby'] = false;
+                            unset($this->trains[$k]['riders'][$k2]);
+                            $this->stations[21]['people'][] = $p;
                         } else {
                             // Rider has reached
                             $this->delay += $minute - $p['start'];
@@ -197,6 +241,15 @@ class Trips extends Command
                         }
                     }
                     // TODO Delay 2 minutes at five points?
+                }
+                if (count($v['stations']) == 1) {
+                    // Offload all they are riding to transfer
+                    foreach ($v['riders'] as $k2 => $p) {
+                        // Transfer
+                        $p['fivePoints'] = false;
+                        unset($this->trains[$k]['riders'][$k2]);
+                        $this->stations[22]['people'][] = $p;
+                    }
                 }
             }
         }
