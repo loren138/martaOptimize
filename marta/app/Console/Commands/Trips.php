@@ -36,6 +36,7 @@ class Trips extends Command
     public $delay = 0;
     public $stationOrder;
     public $chunksAll;
+    public $report = [];
 
     /**
      * Create a new command instance.
@@ -192,6 +193,23 @@ class Trips extends Command
         }
     }
 
+    public function report($minute) {
+        $stations = [];
+        foreach ($this->stations as $k => $v) {
+            $stations[$k] = count($v['people']);
+        }
+        $trains = [];
+        foreach ($this->trains as $k => $v) {
+            if ($v['stations'][0]['d'] == 0) {
+                $loc = $v['stations'][0]['s'];
+            } else {
+                $loc = $v['stations'][0]['s'].'-'.$v['stations'][1]['s'];
+            }
+            $trains[] = ['riders' => count($v['riders']), 'location' => $loc];
+        }
+        $this->report[$minute] = ['s' => $stations, 't' => $trains];
+    }
+
     /**
      * Execute the console command.
      *
@@ -199,20 +217,27 @@ class Trips extends Command
      */
     public function handle()
     {
+        $report = true;
         ini_set('memory_limit','2048M');
         // Time 4am to 3am
         for ($minute = 0; $minute < 1380; $minute++) {
             $time = $this->convertTime($minute);
-            $this->info("Minute: ".$minute." Current time: ".$time);
+            $this->info("Minute: ".$minute." Current time: ".$time." Delay: ".$this->delay);
             $this->advanceTrains();
             $this->placeTrains($time);
-            foreach ($this->trains as $k => $t) {
-                $this->info($k.' '.$t['stations'][0]['s'].' '.$t['stations'][0]['d']);
-            }
+            //foreach ($this->trains as $k => $t) {
+            //    $this->info($k.' '.$t['stations'][0]['s'].' '.$t['stations'][0]['d']);
+            //}
             $this->boardPeople();
             $this->offloadPeople($time, $minute);
             $this->peopleIntoStations($time, $minute);
-            //$this->report();
+            if ($report) {
+                $this->report($minute);
+            }
+        }
+
+        if ($report) {
+            file_put_contents(storage_path('report.json'), json_encode($this->report));
         }
 
         $this->info("Total Delay ". $this->delay." minutes!");
