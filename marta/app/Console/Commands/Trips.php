@@ -165,12 +165,12 @@ class Trips extends Command
                         if ($k2 == 13) {
                             // There is only one train at Bankhead board it
                             $canRide = true;
-                            break;
+                            $p['ashby'] = true;
                         }
                         if (in_array($k2, $this->redOnly) && !in_array($p['dest'], $this->redOnly) && $s['s'] == 47) {
                             // If we're at a red only station going to not red only, we need to go to Lindbergh
                             $canRide = true;
-                            break;
+                            $p['lindbergh'] = true;
                         }
                         if (!in_array($k2, $this->redOnly) && in_array($p['dest'], $this->redOnly) && $s['s'] == 47) {
                             // If we're going to a red only station and not at one, we need to get to Lindbergh
@@ -281,7 +281,7 @@ class Trips extends Command
             $this->stations[$p->entry_station]['people'][] = [
                 'dest' => $p->exit_station, 'start' => $minute, 'fivePoints' => $fivePoints,
                 'lindbergh' => false, 'ashby' => false
-            ];
+            ]; //32,110,077
         }
     }
 
