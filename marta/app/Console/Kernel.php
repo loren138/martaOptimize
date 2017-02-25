@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\Import::class,
         \App\Console\Commands\LatLon::class,
+        \App\Console\Commands\Trips::class,
     ];
 
     /**
