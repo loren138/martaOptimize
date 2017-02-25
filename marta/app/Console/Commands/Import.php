@@ -38,7 +38,7 @@ class Import extends Command
      */
     public function handle()
     {
-        $stations = "North Springs	54
+        $stations['red'] = "North Springs	54
 Sandy Springs	18
 Dunwoody	53
 Medical Center	52
@@ -57,16 +57,63 @@ Lakewood/Ft. McPherson	38
 East Point	39
 College Park	40
 Airport	41";
+$stations['gold'] = "Doraville	50
+Chamblee	49
+Brookhaven/Oglethorpe	20
+Lenox	48
+Lindbergh Center	47
+Arts Center	46
+Midtown	45
+North Avenue	44
+Civic Center	43
+Peachtree Center	42
+Five Points	22
+Garnett	19
+West End	36
+Oakland City	37
+Lakewood/Ft. McPherson	38
+East Point	39
+College Park	40
+Airport	41";
+$stations['blue'] = 'Indian Creek	35
+Kensington	34
+Avondale	33
+Decatur	32
+East Lake	31
+Edgewood/Candler Park	30
+Inman Park	29
+King Memorial	28
+Georgia State	27
+Five Points	22
+Dome/GWCC	24
+Vine City	23
+Ashby	21
+West Lake	25
+H.E. Holmes	26';
+$stations['green'] = 'Edgewood/Candler Park	30
+Inman Park	29
+King Memorial	28
+Georgia State	27
+Five Points	22
+Dome/GWCC	24
+Vine City	23
+Ashby	21
+Bankhead	13';
+
         $sa = explode("\n", $stations);
-        foreach ($sa as $k=>$v) {
-            $v = explode("\t", $v);
-            $s = new Station();
-            $n = $s->find($v[1]);
-            if ($n === null) {
-                $s->id = $v[1];
-                $s->name = $v[0];
-            }
-        }
+foreach ($stations as $k => $v) {
+	$stations[$k] = explode("\n", $v);
+	foreach ($stations[$k] as $k2 => $v2) {
+		$stations[$k][$k2] = explode("\t", $v2);
+                $s = new Station();
+                $n = $s->find($v[1]);
+                if ($n === null) {
+                    $s->id = $v[1];
+                    $s->name = $v[0];
+                    $s->save();
+                }
+	}
+}
         $this->info('hey');
     }
 }
