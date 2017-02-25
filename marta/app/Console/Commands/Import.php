@@ -107,6 +107,7 @@ Bankhead	13';
             foreach ($stations[$line] as $k2 => $v2) {
                 $order++;
                 $stations[$line][$k2] = explode("\t", $v2);
+                $v2 = $stations[$line][$k2];
                 $s = new Station();
                 $n = $s->find($v2[1]);
                 if ($n === null) {
