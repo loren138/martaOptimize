@@ -116,6 +116,13 @@ class Trips extends Command
             } elseif ($v['stations'][0]['d'] == 0) { // Advance a station
                 //print_r($this->trains[$k]['stations'][0]);
                 $passed = array_shift($this->trains[$k]['stations']);
+                if (count($this->trains[$k]['stations']) == 0) {
+                    if (count($this->trains[$k]['riders'])) {
+                        $this->error('stranded rider!');
+                        print_r($this->trains[$k]['riders']);
+                    }
+                    unset($this->trains[$k]);
+                }
                 //print_r($this->trains[$k]['stations'][0]);
                 //die;
             }
