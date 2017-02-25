@@ -80,6 +80,7 @@ class Trips extends Command
             $stations = [];
             $first = false;
             $forward = true;
+            $lastDelay = 0;
             foreach ($trains as $t) {
                 if (!$active) {
                     if ($t->station == $p->startStation) {
@@ -93,7 +94,14 @@ class Trips extends Command
                     }
                 }
                 if ($active) {
-                    $stations[] = ['s' => $t->station, 'd' => $first ? 0 : $t->delay];
+                    $delay = $t->delay;
+                    if ($first) {
+                        $delay = 0;
+                    } elseif (!$forward) {
+                        $delay = $lastDelay;
+                    }
+                    $stations[] = ['s' => $t->station, 'd' => $delay];
+                    $lastDelay = $t->delay;
                     $first = false;
                 }
             }
@@ -123,6 +131,10 @@ class Trips extends Command
                     }
                     unset($this->trains[$k]);
                     continue;
+                }
+                if ($this->trains[$k]['stations'][0]['d'] == 0) {
+                    $this->error('0 delay');
+                    print_r($this->trains[$k]['stations']);
                 }
                 //print_r($this->trains[$k]['stations'][0]);
                 //die;
