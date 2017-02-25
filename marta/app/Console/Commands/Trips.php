@@ -140,7 +140,7 @@ class Trips extends Command
                 }
                 if ($this->trains[$k]['stations'][0]['d'] == 0) {
                     $this->error('0 delay');
-                    //var_export($this->trains[$k]['stations']);
+                    var_export($this->trains[$k]['stations']);
                 }
                 //print_r($this->trains[$k]['stations'][0]);
                 //die;
@@ -153,7 +153,7 @@ class Trips extends Command
         foreach ($this->trains as $k => $v) {
             if ($v['stations'][0]['d'] == 0) {
                 if($v['stations'][0]['s'] == 25) {
-                    $this->info("train at 25");
+                    $this->error("train at 25");
                 }
                 // Go through all the trains in stations
                 $cur = $v['stations'][0]['s'];
@@ -245,8 +245,8 @@ class Trips extends Command
                             // Rider has reached
                             $this->delay += $minute - $p['start'];
                             if (($minute - $p['start']) > 200) {
-                                $this->error($minute - $p['start']);
-                                var_export($p);
+                                //$this->error($minute - $p['start']);
+                                //var_export($p);
                             }
                             unset($this->trains[$k]['riders'][$k2]);
                         }
