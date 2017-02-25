@@ -221,9 +221,9 @@ class Trips extends Command
         ini_set('memory_limit','2048M');
         // Time 4am to 3am
         //1380
-        for ($minute = 0; $minute < 100; $minute++) {
+        for ($minute = 0; $minute < 1380; $minute++) {
             $time = $this->convertTime($minute);
-            //$this->info("Minute: ".$minute." Current time: ".$time." Delay: ".$this->delay." ".count($this->trains));
+            $this->info("Minute: ".$minute." Current time: ".$time." Delay: ".$this->delay." ".count($this->trains));
             $this->advanceTrains();
             $this->placeTrains($time);
             //foreach ($this->trains as $k => $t) {
@@ -239,13 +239,9 @@ class Trips extends Command
 
         if ($report) {
             $r = json_encode($this->report);
-            echo $r;
-            $fp = fopen(storage_path('report2.json'), 'w');
-            fwrite($fp, $r);
-            fclose($fp);
             file_put_contents(storage_path('report.json'), $r);
         }
 
-        //$this->info("Total Delay ". $this->delay." minutes!");
+        $this->info("Total Delay ". $this->delay." minutes!");
     }
 }
