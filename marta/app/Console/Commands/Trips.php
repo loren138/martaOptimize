@@ -115,7 +115,7 @@ class Trips extends Command
             } elseif ($v['stations'][0]['d'] == 0) { // Advance a station
                 $passed = array_shift($this->trains[$k]['stations']);
             }
-            $this->trains[$k]['stations']['d'] -= 1; // Move the train forward between stations
+            $this->trains[$k]['stations'][0]['d'] -= 1; // Move the train forward between stations
         }
     }
 
